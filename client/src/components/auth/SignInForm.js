@@ -83,7 +83,7 @@ const SignInForm = () => {
     } catch (error) {
       console.error("Login failed:", error);
       setSnackbarSeverity("error");
-      setSnackbarMessage(error.message || "An error occurred");
+      setSnackbarMessage(error.response.data.message|| "An error occurred");
       setSnackbarOpen(true);
     } finally {
       setLoading(false);
