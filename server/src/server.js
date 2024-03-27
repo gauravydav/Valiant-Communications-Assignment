@@ -17,6 +17,7 @@ connectDB();
 
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api', uploadRoutes);
+app.use('/api', require('./routes/history'));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);
