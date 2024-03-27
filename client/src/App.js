@@ -4,6 +4,8 @@ import LoginPage from "./components/auth/SignInForm";
 import RegisterPage from "./components/auth/SignUpForm";
 import StudentPage from "./components/dashboard/StudentPage";
 import StaffPage from "./components/dashboard/StaffPage";
+import RoleBasedRoute from "./components/auth/RoleBasedRoute";
+import NotFound from "./components/notFound/NotFound";
 
 function App() {
   return (
@@ -11,8 +13,19 @@ function App() {
       <Routes>
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/staff" element={<StudentPage />} />
-        <Route path="/student" element={<StaffPage />} />
+        <Route
+          path="/student"
+          element={
+            <RoleBasedRoute element={StudentPage} allowedRoles={["student"]} />
+          }
+        />
+        <Route
+          path="/staff"
+          element={
+            <RoleBasedRoute element={StaffPage} allowedRoles={["staff"]} />
+          }
+        />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>
   );

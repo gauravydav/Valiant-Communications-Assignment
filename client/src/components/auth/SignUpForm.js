@@ -62,14 +62,12 @@ const SignUpForm = () => {
       [name]: value,
     }));
   };
-
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       await schema.validate(signUpData, { abortEarly: false });
-
-      // Create user object
+  
       const newUser = {
         username: signUpData.username,
         email: signUpData.email,
@@ -77,25 +75,31 @@ const SignUpForm = () => {
         name: signUpData.name,
         contactNumber: signUpData.contactNumber
       };
-
-      // Send user data to server for registration
+  
       await axios.post("http://localhost:12000/api/auth/register", newUser);
-
+  
       setSnackbarSeverity("success");
       setSnackbarMessage("Registered successfully. You can now login.");
       setSnackbarOpen(true);
     } catch (error) {
       console.error('Registration failed:', error);
-      setErrors(error.inner.reduce((acc, current) => {
-        acc[current.path] = current.message;
-        return acc;
-      }, {}));
+      
+      if (error && error.inner) {
+        setErrors(error.inner.reduce((acc, current) => {
+          acc[current.path] = current.message;
+          return acc;
+        }, {}));
+      } else {
+        console.error('Error:', error?.response?.data?.message);
+        setErrors({});
+      }
+  
       setSnackbarSeverity("error");
-      setSnackbarMessage(error.errors?.[0] || "An error occurred during registration.");
+      setSnackbarMessage( error?.response?.data?.message || "An error occurred during registration.");
       setSnackbarOpen(true);
     }
   };
-
+  
   useEffect(() => {
     const isAuthenticated = false;
     if (isAuthenticated) {
